@@ -1,4 +1,4 @@
-from models import db
+from src.database.sessao import db
 
 
 class Cliente(db.Model):
@@ -30,13 +30,12 @@ class Produto(db.Model):
         self.preco = preco 
 
 
-
 class Venda(db.Model):
     __tablename__ = 'vendas'
 
     id = db.Column(db.Integer, primary_key=True)
-    id_cliente = db.Column(db.Integer, db.Foreignkey('clientes.id'), nullable=False)
-    id_produto = db.Column(db.Integer, db.Foreignkey('produtos.id'), nullable=False)
+    id_cliente = db.Column(db.Integer, db.ForeignKey('clientes.id'), nullable=False)
+    id_produto = db.Column(db.Integer, db.ForeignKey('produtos.id'), nullable=False)
     quantidade_vendida = db.Column(db.Integer, nullable=False)
     data_da_venda = db.Column(db.Date, nullable=False)
 
