@@ -8,26 +8,30 @@ def register_routes(app):
     
     @app.route('/import_data/cliente', methods = ['POST'])
     def registro_clientes():
+        # recebendo o json
         data = request.get_json()
+        
         print(f"""
-              id do cliente: {data['id']}
-              nome do cliente: {data['nome']}
-              endereço do cleinte: {data['endereco']}
-              contato do cliente: {data['contato']}
-              """)
+            id do cliente: {data['id']}
+            nome do cliente: {data['nome']}
+            endereço do cleinte: {data['endereco']}
+            contato do cliente: {data['contato']}
+            """)
+    
         return jsonify({"menssage": "adcionado com sucesso"})
     
     @app.route('/import_data/produto', methods = ['POST'])
     def registro_produto():
         data = request.get_json()
+        
         print(f"""
             id do produto: {data['id']}
             nome do produto: {data['nome']}
             endereço do produto: {data['codigo']}
             Categoria do produto: {data['categoria']}
             preco do produto: {data['preco']}
-            
             """)
+        
         return jsonify({"menssage": "adcionado com sucesso"})
     
     @app.route('/import_data/venda', methods = ['POST'])
