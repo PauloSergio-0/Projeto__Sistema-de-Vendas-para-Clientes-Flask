@@ -27,8 +27,7 @@ class Produto(db.Model):
         self.nome = nome 
         self.codigo = codigo
         self.categoria = categoria
-        self.preco = preco 
-
+        self.preco = preco
 
 class Venda(db.Model):
     __tablename__ = 'vendas'
