@@ -1,20 +1,44 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from src.models import db  # Ajuste a importação
 
-# Inicializando o aplicativo Flask
-app = Flask(__name__)
+class Cliente(db.Model):
+    __tablename__ = 'clientes'
 
-# Configuração do banco de dados
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sistema_vendas.db'  
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(20), nullable=False)
+    endereco = db.Column(db.String(50), nullable=False)  
+    contato = db.Column(db.String(30), nullable=False) 
 
-# Inicializando o SQLAlchemy
-db = SQLAlchemy(app)
+    def __init__(self, nome, endereco, contato):
+        self.nome = nome
+        self.endereco = endereco
+        self.contato = contato
 
-def init_db():
-    with app.app_context():
-        db.create_all()  # Cria as tabelas no banco de dados
+class Produto(db.Model):
+    __tablename__ = 'produtos'
 
-# Executa a criação do banco de dados se este arquivo for executado diretamente
-if __name__ == '__main__':
-    init_db()
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(20), nullable=False)
+    codigo = db.Column(db.Integer, nullable=False)  
+    categoria = db.Column(db.String(20), nullable=False) 
+    preco = db.Column(db.Float, nullable=False)
+
+    def __init__(self, nome, codigo, categoria, preco):
+        self.nome = nome 
+        self.codigo = codigo
+        self.categoria = categoria
+        self.preco = preco 
+
+class Venda(db.Model):
+    __tablename__ = 'vendas'
+
+    id = db.Column(db.Integer, primary_key=True)
+    id_cliente = db.Column(db.Integer, db.ForeignKey('clientes.id'), nullable=False)  
+    id_produto = db.Column(db.Integer, db.ForeignKey('produtos.id'), nullable=False)  
+    quantidade_vendida = db.Column(db.Integer, nullable=False)
+    data_da_venda = db.Column(db.Date, nullable=False)
+
+    def __init__(self, id_cliente, id_produto, quantidade_vendida, data_da_venda):
+        self.id_cliente = id_cliente
+        self.id_produto = id_produto
+        self.quantidade_vendida = quantidade_vendida
+        self.data_da_venda = data_da_venda
