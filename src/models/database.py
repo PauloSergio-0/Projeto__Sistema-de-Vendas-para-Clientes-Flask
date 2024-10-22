@@ -14,21 +14,6 @@ class Cliente(db.Model):
         self.endereco = endereco
         self.contato = contato
 
-class Produto(db.Model):
-    __tablename__ = 'produtos'
-
-    id = db.Column(db.Integer, primary_key=True)
-    nome = db.Column(db.String(20), nullable=False)
-    codigo = db.Column(db.Integer, nullable=False)
-    categoria = db.Column(db.String(20), nullable=False)
-    preco = db.Column(db.Float, nullable=False)
-
-    def __init__(self, nome, codigo, categoria, preco):
-        self.nome = nome 
-        self.codigo = codigo
-        self.categoria = categoria
-        self.preco = preco
-
 class Venda(db.Model):
     __tablename__ = 'vendas'
 

@@ -1,1 +1,1 @@
-from .database import Venda, Cliente, Produto
+from .database import Venda, Cliente
