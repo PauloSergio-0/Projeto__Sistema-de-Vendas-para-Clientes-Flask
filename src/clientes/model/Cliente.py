@@ -1,4 +1,4 @@
-from src.database.sessao import db
+from src.database import db
 
 
 class Cliente(db.Model):
@@ -10,8 +10,8 @@ class Cliente(db.Model):
     email = db.Column(db.String(20), unique=True, nullable=False)
     status = db.Column(db.Boolean, default=True)
 
-    def __init__(self, nome, endereco, contato, status):
+    def __init__(self, nome, endereco, email, status):
         self.nome = nome
         self.endereco = endereco
-        self.email = contato
+        self.email = email
         self.status = status

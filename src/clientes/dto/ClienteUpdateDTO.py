@@ -1,4 +1,4 @@
-class ClienteUpdateDTO:
+"""class ClienteUpdateDTO:
     def __init__(self, nome=None, endereco=None, email=None, status=None):
         self.nome = nome
         self.endereco = endereco
@@ -7,3 +7,4 @@ class ClienteUpdateDTO:
 
     def __repr__(self):
         return f"ClienteUpdateDTO(nome={self.nome}, endereco={self.endereco}, email={self.email}, status={self.status})"
+"""

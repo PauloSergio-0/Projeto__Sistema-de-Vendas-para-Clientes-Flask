@@ -1,4 +1,4 @@
-class ClienteListDTO:
+"""class ClienteListDTO:
     def __init__(self, id, nome, endereco, email, status):
         self.id = id
         self.nome = nome
@@ -8,3 +8,5 @@ class ClienteListDTO:
 
     def listar_clientes(clientes):
         return clientes
+
+"""
