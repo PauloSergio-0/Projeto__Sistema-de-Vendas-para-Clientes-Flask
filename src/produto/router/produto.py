@@ -1,15 +1,11 @@
-from http.client import HTTPException
-from typing import Union
-
 from flask import request, jsonify
 
-from src.database.sessao import db
-from src.exception.exception import ProdutoImportException, ProdutoExisteException
-from src.models.produto import Produto, ProdutoDTO
+from src.exception.exception import ProdutoImportException, ProdutoExisteException, ValidacaoException
+from src.produto.dto.produtoDTO import ProdutoDTO
 
 
 def register_routes_produto(app):
-	@app.route('/import_data/produto', methods=['POST'])
+	@app.route('/importar/produto', methods=['POST'])
 	def importar_produto():
 		try:
 			data = request.get_json()
@@ -17,9 +13,9 @@ def register_routes_produto(app):
 
 			return jsonify({
 				"code": 200,
-				"menssagem": "Produto importado com sucesso"
+				"menssagem": "Produto importado com sucesso!"
 			}), 200
-		except (ProdutoImportException, ProdutoExisteException) as e:
+		except (ProdutoImportException, ProdutoExisteException, ValidacaoException) as e:
 			return jsonify({
 				"code": 406,
 				"error": str(e)
@@ -37,12 +33,12 @@ def register_routes_produto(app):
 
 			return jsonify({
 				"code": 200,
-				"produtos": produtos
+				"produto": produtos
 			}), 200
 		except Exception as e:
 			return jsonify({
 				"code": 500,
-				"error": f"Desculpe-me, ocorreu um erro inesperado. {str(e)}"
+				"error": "Desculpe-me, ocorreu um erro inesperado."
 			}), 500
 
 	@app.route('/cadastrar/produto/', methods=['POST'])
@@ -53,9 +49,10 @@ def register_routes_produto(app):
 
 			return jsonify({
 				"code": 201,
+				"msg": "Produto cadastrado com sucesso!",
 				"produto": produto
 			}), 201
-		except ProdutoExisteException as e:
+		except (ProdutoExisteException, ValidacaoException) as e:
 			return jsonify({
 				"code": 406,
 				"error": str(e)
@@ -66,7 +63,29 @@ def register_routes_produto(app):
 				"error": "Desculpe-me, ocorreu um erro inesperado."
 			}), 500
 
-	@app.route('/inativar/produto', methods=["POST"])
+	@app.route('/atualizar/produto/', methods=['PUT'])
+	def atualizar_produto():
+		try:
+			data = request.get_json()
+			produto = ProdutoDTO().atualizar_produto(data)
+
+			return jsonify({
+				"code": 201,
+				"msg": "Produto atualizado com sucesso!",
+				"produto": produto
+			}), 201
+		except (ProdutoExisteException, ValidacaoException) as e:
+			return jsonify({
+				"code": 406,
+				"error": str(e)
+			}), 406
+		except Exception as e:
+			return jsonify({
+				"code": 500,
+				"error": f"Desculpe-me, ocorreu um erro inesperado."
+			}), 500
+
+	@app.route('/inativar/produto', methods=["PATCH"])
 	def inativar_produto():
 		try:
 			data = request.get_json()
@@ -82,7 +101,7 @@ def register_routes_produto(app):
 				"error": "Desculpe-me, ocorreu um erro inesperado."
 			}), 500
 
-	@app.route('/excluir/produto/', methods=["POST"])
+	@app.route('/excluir/produto/', methods=["DELETE"])
 	def excluir_produto():
 		try:
 			data = request.get_json()

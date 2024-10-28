@@ -19,7 +19,7 @@ class Venda(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     id_cliente = db.Column(db.Integer, db.ForeignKey('clientes.id'), nullable=False)
-    id_produto = db.Column(db.Integer, db.ForeignKey('produtos.id'), nullable=False)
+    id_produto = db.Column(db.Integer, db.ForeignKey('produto.id'), nullable=False)
     quantidade_vendida = db.Column(db.Integer, nullable=False)
     data_da_venda = db.Column(db.Date, nullable=False)
 

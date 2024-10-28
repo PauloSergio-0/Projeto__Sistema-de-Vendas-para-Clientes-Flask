@@ -1,13 +1,6 @@
 from flask import request, jsonify
 
-from src.database.sessao import db
-from src.models.database import Cliente, Venda
-
-from src.routes.produto import register_routes_produto
-
 def register_routes(app):
-    register_routes_produto(app)
-
     @app.route('/import_data/cliente', methods=['POST'])
     def registro_clientes():
         # recebendo o json

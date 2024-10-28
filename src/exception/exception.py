@@ -3,3 +3,6 @@ class ProdutoImportException(Exception):
 
 class ProdutoExisteException(Exception):
     pass
+
+class ValidacaoException(Exception):
+    pass

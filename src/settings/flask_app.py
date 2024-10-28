@@ -3,6 +3,8 @@ from flask import Flask
 from src.database.sessao import db
 from src.routes.routes_app import register_routes
 from .config import Config
+from ..produto.router.produto import register_routes_produto
+
 
 def create_app():
     
@@ -16,5 +18,6 @@ def create_app():
         db.create_all()
    
     register_routes(app)
+    register_routes_produto(app)
     
     return app
