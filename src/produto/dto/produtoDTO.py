@@ -2,7 +2,7 @@ from typing import List, Dict, Union, Any
 
 from src.database.sessao import db
 from src.exception.exception import ProdutoImportException, ProdutoExisteException, ValidacaoException
-from src.produto.models.produto import Produto
+from src.produto.model.produto import Produto
 from src.settings.config import Config
 
 
