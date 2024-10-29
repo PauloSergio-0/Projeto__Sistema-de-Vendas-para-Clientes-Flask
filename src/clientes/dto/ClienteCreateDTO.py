@@ -23,4 +23,5 @@ def create_cliente(data):
         return cliente_dto
     except Exception as e:
         print(f"Erro: {e}")
-        return None """
+        return None
+"""

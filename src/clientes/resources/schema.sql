@@ -1,0 +1,7 @@
+CREATE TABLE clientes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    endereco TEXT NOT NULL,
+    email VARCHAR NOT NULL,
+    status NUMERIC NOT NULL
+);
