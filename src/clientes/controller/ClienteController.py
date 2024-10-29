@@ -36,29 +36,32 @@ def register_routes(app):
     @app.route('/cliente/<int:id>', methods=['GET'])
     def get_cliente(id):
         cliente = Cliente.query.get_or_404(id)
-        return jsonify({
+
+        resultado = {
             'id': cliente.id,
             'nome': cliente.nome,
             'endereco': cliente.endereco,
             'email': cliente.email,
-            'status': cliente.status
-        })
+            'status': cliente.status.value
+        }
+        return jsonify({"resultado": resultado}), 200
 
     @app.route('/cliente/<int:id>', methods=['PUT'])
     def update_cliente(id):
         data = request.json
         cliente = Cliente.query.get_or_404(id)
-        status = data.get('status', cliente.status)
+
+        status = data.get('status', cliente.status.value)
         if status not in {Status.ATIVO.value, Status.INATIVO.value}:
-            return jsonify({"erro"}), 400
+            return jsonify({"erro": "Status deve ser 'ativo' ou 'inativo'"}), 400
 
         cliente.nome = data.get('nome', cliente.nome)
         cliente.endereco = data.get('endereco', cliente.endereco)
         cliente.email = data.get('email', cliente.email)
-        cliente.status = status
+        cliente.status = Status(status)
         db.session.commit()
 
-        return jsonify({'id': cliente.id})
+        return jsonify({'id': cliente.id}), 200
 
     @app.route('/cliente/<int:id>', methods=['DELETE'])
     def delete_cliente(id):
