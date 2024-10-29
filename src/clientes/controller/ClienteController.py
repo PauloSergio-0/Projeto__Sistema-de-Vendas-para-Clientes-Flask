@@ -21,15 +21,17 @@ def register_routes(app):
     @app.route('/cliente', methods=['GET'])
     def get_clientes():
         clientes = Cliente.query.all()
-        return jsonify([
+        resultado = [
             {
                 'id': c.id,
                 'nome': c.nome,
                 'endereco': c.endereco,
                 'email': c.email,
-                'status': c.status
+                'status': c.status.value
             } for c in clientes
-        ])
+        ]
+
+        return jsonify({"resultado": resultado}), 200
 
     @app.route('/cliente/<int:id>', methods=['GET'])
     def get_cliente(id):
