@@ -4,6 +4,7 @@ from src.database.sessao import db
 from src.routes.routes_app import register_routes
 from .config import Config
 from ..produto.router.produto import register_routes_produto
+from src.vendas.router.venda import register_routes_venda
 
 
 def create_app():
@@ -19,5 +20,6 @@ def create_app():
    
     register_routes(app)
     register_routes_produto(app)
+    register_routes_venda(app)
     
     return app
