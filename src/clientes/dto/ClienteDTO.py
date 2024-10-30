@@ -1,7 +1,7 @@
 from typing import List, Dict, Any
 from src.database import db
 from src.clientes.model import Cliente, Status
-from src.exception.exception import ClienteExisteException, ValidacaoException
+from src.clientes.exception import ClienteExisteException, ValidacaoException
 
 class ClienteDTO:
     def get_descricao_status(self, status: str) -> str:
@@ -12,10 +12,10 @@ class ClienteDTO:
         raise ValueError(f"Status inválido: {status}")
 
     def criar_cliente(self, data: Dict[str, Any]) -> Dict[str, Any]:
-        self.__validar_dados(data)
+        self.validar_dados(data)
 
-        if self.__existe_cliente_email(data['email']):
-            raise ClienteExisteException("Já existe um cliente cadastrado com o email informado.")
+        if self.cliente_email(data['email']):
+            raise ClienteExisteException("Já existe um cliente cadastrado com o email informado")
 
         cliente = Cliente(nome=data['nome'], endereco=data['endereco'], email=data['email'], status=Status.ATIVO)
         db.session.add(cliente)
@@ -30,7 +30,7 @@ class ClienteDTO:
         }
 
     def atualizar_cliente(self, id_cliente: int, data: Dict[str, Any]) -> Dict[str, Any]:
-        self.__validar_dados(data, is_update=True)
+        self.validar_dados(data, is_update=True)
 
         cliente = Cliente.query.get_or_404(id_cliente)
         cliente.nome = data.get('nome', cliente.nome)
