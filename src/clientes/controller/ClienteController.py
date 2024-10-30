@@ -66,8 +66,6 @@ def register_routes(app):
             print("Status recebido:", data.get('status'))
 
             status = data.get('status', cliente.status.value).upper()
-            if status not in {Status.ATIVO.value, Status.INATIVO.value}:
-                return jsonify({"erro": "Status deve ser 'ATIVO' ou 'INATIVO'."}), 400
 
             cliente.nome = data.get('nome', cliente.nome)
             cliente.endereco = data.get('endereco', cliente.endereco)
@@ -83,6 +81,21 @@ def register_routes(app):
 
         except KeyError as e:
             return jsonify({"erro": f"Campo obrigatório ausente: {str(e)}"}), 400
+
+        except Exception as e:
+            return jsonify({"erro": str(e)}), 500
+
+    @app.route('/cliente/<int:id>', methods=['PATCH'])
+    def inativar_cliente(id):
+        try:
+            cliente = Cliente.query.get_or_404(id)
+            if cliente.status == Status.INATIVO:
+                return jsonify({"erro": "Cliente já está inativo."}), 400
+
+            cliente.status = Status.INATIVO
+            db.session.commit()
+
+            return jsonify({"mensagem": "Cliente inativado com sucesso."}), 200
 
         except Exception as e:
             return jsonify({"erro": str(e)}), 500
