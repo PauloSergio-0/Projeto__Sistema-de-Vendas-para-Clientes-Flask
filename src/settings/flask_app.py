@@ -1,7 +1,7 @@
 from flask import Flask
 
-from src.database.sessao import db
-from src.routes.routes_app import register_routes
+from src.database import db
+from src.clientes.controller.ClienteController import register_routes
 from .config import Config
 from ..produto.router.produto import register_routes_produto
 

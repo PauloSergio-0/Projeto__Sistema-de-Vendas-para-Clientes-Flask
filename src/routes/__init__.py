@@ -1,1 +1,0 @@
-from .routes_app import register_routes
