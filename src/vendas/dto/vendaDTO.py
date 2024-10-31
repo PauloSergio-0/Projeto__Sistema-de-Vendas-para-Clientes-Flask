@@ -4,7 +4,7 @@ from typing import List, Dict, Any
 from datetime import datetime
 from src.database.sessao import db
 from src.produto.dto.produtoDTO import ProdutoDTO
-from src.cliente.dto.clienteDTO import ClienteDTO
+from src.clientes.dto.ClienteDTO import ClienteDTO
 from src.vendas.model import Venda
 from src.settings.config import Config
 

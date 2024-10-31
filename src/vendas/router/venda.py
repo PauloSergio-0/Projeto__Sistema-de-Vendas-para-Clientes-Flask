@@ -17,7 +17,7 @@ def register_routes_venda(app):
         except Exception as e:
             return jsonify({"code": 500, "error": "Erro inesperado."}), 500
 
-    @app.route('/vendas', methods=['GET'])
+    @app.route('/listar/vendas', methods=['GET'])
     def listar_vendas():
         filtros = request.args.to_dict()
         vendas = VendaDTO().listar_vendas(filtros)
@@ -32,7 +32,7 @@ def register_routes_venda(app):
 
         return jsonify({"code": 200, "vendas": vendas_json}), 200
 
-    @app.route('cadastrar/vendas', methods=['POST'])
+    @app.route('/cadastrar/vendas', methods=['POST'])
     def registrar_venda():
         try:
             dados = request.get_json()

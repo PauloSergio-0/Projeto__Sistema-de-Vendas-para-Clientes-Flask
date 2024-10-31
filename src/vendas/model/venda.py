@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
-
+from src.database.sessao import db
+from src.settings.config import Config
 
 class Venda(db.Model):
     __tablename__ = 'vendas'

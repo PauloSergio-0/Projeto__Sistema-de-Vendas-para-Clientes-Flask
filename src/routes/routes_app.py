@@ -15,6 +15,21 @@ def register_routes(app):
     
         return jsonify({"menssage": "adcionado com sucesso"})
     
+    @app.route('/import_data/produto', methods=['POST'])
+    def registro_produto():
+        data = request.get_json()
+    
+        print(f"""
+            id do produto: {data['id']}
+            nome do produto: {data['nome']}
+            código do produto: {data['codigo']}
+            categoria do produto: {data['categoria']}
+            preço do produto: {data['preco']}
+            """)
+    
+        return jsonify({"menssage": "adicionado com sucesso"})
+
+
     @app.route('/import_data/venda', methods=['POST'])
     def registro_venda():
         data = request.get_json()
@@ -27,3 +42,7 @@ def register_routes(app):
             """)
         
         return jsonify({"menssage": "adcionado com sucesso"})
+    
+    @app.route('/clientes', methods=['GET'])
+    def listar_clientes():
+        return jsonify(clientes), 200
