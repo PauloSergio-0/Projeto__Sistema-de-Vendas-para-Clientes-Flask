@@ -1,5 +1,7 @@
 from flask import request, jsonify
 
+clientes = []
+
 def register_routes(app):
     @app.route('/import_data/cliente', methods=['POST'])
     def registro_clientes():
@@ -45,4 +47,7 @@ def register_routes(app):
     
     @app.route('/clientes', methods=['GET'])
     def listar_clientes():
-        return jsonify(clientes), 200
+        try:
+            return jsonify(clientes), 200
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
