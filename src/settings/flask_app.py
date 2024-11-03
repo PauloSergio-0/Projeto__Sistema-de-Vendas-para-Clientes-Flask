@@ -3,7 +3,7 @@ from flask import Flask
 from src.database import db
 from src.clientes.controller.ClienteController import register_routes_cliente
 from .config import Config
-from ..produto.controller.produto import register_routes_produto
+from ..produto.controller.ProtudoController import register_routes_produto
 
 
 def create_app():
