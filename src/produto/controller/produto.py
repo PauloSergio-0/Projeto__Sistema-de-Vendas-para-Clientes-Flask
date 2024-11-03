@@ -1,6 +1,6 @@
 from flask import request, jsonify
 
-from src.exception.exception import ProdutoImportException, ProdutoExisteException, ValidacaoException
+from src.produto.exception.exception import ProdutoImportException, ProdutoExisteException, ValidacaoException
 from src.produto.dto.produtoDTO import ProdutoDTO
 
 
@@ -18,12 +18,12 @@ def register_routes_produto(app):
 		except (ProdutoImportException, ProdutoExisteException, ValidacaoException) as e:
 			return jsonify({
 				"code": 406,
-				"error": str(e)
+				"error": f"Falha ao importar o produto: {str(e)}"
 			}), 406
 		except Exception as e:
 			return jsonify({
 				"code": 500,
-				"error": "Desculpe-me, ocorreu um erro inesperado."
+				"error": f"Desculpe-me, ocorreu um erro inesperado. {str(e)}"
 			}), 500
 
 	@app.route('/listar/produto', methods=['GET'])

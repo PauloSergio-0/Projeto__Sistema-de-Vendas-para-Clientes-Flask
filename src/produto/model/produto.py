@@ -6,7 +6,7 @@ class Produto(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(50), nullable=False)
-    codigo = db.Column(db.Integer, nullable=False)
+    codigo = db.Column(db.String(30), nullable=False)
     categoria = db.Column(db.String(30), nullable=False)
     preco = db.Column(db.Float, nullable=False)
     status = db.Column(db.Integer, default=True, nullable=False)

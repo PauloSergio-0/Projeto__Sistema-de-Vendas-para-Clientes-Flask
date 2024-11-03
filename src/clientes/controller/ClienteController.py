@@ -3,7 +3,7 @@ from src.clientes.model import Cliente, Status
 from src.database import db
 from sqlalchemy.exc import IntegrityError
 
-def register_routes(app):
+def register_routes_cliente(app):
     @app.route('/cliente', methods=['POST'])
     def registro_clientes():
         try:
@@ -99,7 +99,6 @@ def register_routes(app):
 
         except Exception as e:
             return jsonify({"erro": str(e)}), 500
-
 
     @app.route('/cliente/<int:id>', methods=['DELETE'])
     def delete_cliente(id):
