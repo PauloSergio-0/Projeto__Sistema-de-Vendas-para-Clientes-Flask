@@ -4,7 +4,7 @@ from src.database import db
 from sqlalchemy.exc import IntegrityError
 
 def register_routes_cliente(app):
-    @app.route('/cliente', methods=['POST'])
+    @app.route('/importar/cliente', methods=['POST'])
     def registro_clientes():
         try:
             data = request.get_json()
