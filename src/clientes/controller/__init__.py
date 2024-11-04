@@ -1,1 +1,1 @@
-from .ClienteController import register_routes
+from .ClienteController import register_routes_cliente

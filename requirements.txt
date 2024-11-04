@@ -8,3 +8,4 @@ MarkupSafe==2.1.5
 Werkzeug==3.0.4
 pandas 
 flask_sqlalchemy
+SQLAlchemy~=2.0.36
