@@ -17,7 +17,7 @@ class ClienteDTO:
         if self.cliente_email(data['email']):
             raise ClienteExisteException("Já existe um cliente cadastrado com o email informado")
 
-        cliente = Cliente(nome=data['nome'], endereco=data['endereco'], email=data['email'], status=Status.ATIVO)
+        cliente = Cliente(nome=data['nome'], endereco=data['endereco'], contato=data['contato'], status=Status.ATIVO)
         db.session.add(cliente)
         db.session.commit()
 
