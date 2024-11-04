@@ -107,6 +107,6 @@ def register_routes(app):
             cliente = Cliente.query.get_or_404(id)
             db.session.delete(cliente)
             db.session.commit()
-            return jsonify({'mensagem': 'Cliente deletado'}), 204
+            return jsonify({'mensagem': 'Cliente deletado.'}), 204
         except Exception as e:
             return jsonify({"erro": str(e)}), 500
