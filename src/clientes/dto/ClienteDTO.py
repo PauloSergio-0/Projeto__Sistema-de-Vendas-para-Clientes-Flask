@@ -1,4 +1,4 @@
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from src.database import db
 from src.clientes.model import Cliente, Status
 from src.clientes.exception import ClienteExisteException, ValidacaoException
@@ -64,6 +64,19 @@ class ClienteDTO:
                 'status': self.get_descricao_status(cliente.status.value)
             } for cliente in clientes
         ]
+
+    def listar_clienteID(self, id_cliente: int) -> Optional[Dict[str, Any]]:
+        cliente = Cliente.query.get(id_cliente)
+        if not cliente:
+            return None
+
+        return {
+            'id': cliente.id,
+            'nome': cliente.nome,
+            'endereco': cliente.endereco,
+            'email': cliente.email,
+            'status': self.get_descricao_status(cliente.status.value)
+        }
 
     def validar_dados(self, data: Dict[str, Any], is_update: bool = False) -> None:
         if 'nome' not in data or not data['nome'].strip():
