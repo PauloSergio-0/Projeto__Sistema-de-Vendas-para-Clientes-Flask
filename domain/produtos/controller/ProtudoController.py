@@ -1,7 +1,7 @@
 from flask import request, jsonify
 
-from domain.produto.exception.exception import ProdutoImportException, ProdutoExisteException, ValidacaoException
-from domain.produto.dto.ProdutoDTO import ProdutoDTO
+from domain.produtos.exception.exception import ProdutoImportException, ProdutoExisteException, ValidacaoException
+from domain.produtos.dto.ProdutoDTO import ProdutoDTO
 
 
 def register_routes_produto(app):
@@ -27,7 +27,7 @@ def register_routes_produto(app):
 
 			return jsonify({
 				"code": 200,
-				"produto": produto
+				"produtos": produto
 			}), 200
 		except Exception as e:
 			return jsonify({
@@ -48,7 +48,7 @@ def register_routes_produto(app):
 		except (ProdutoImportException, ProdutoExisteException, ValidacaoException) as e:
 			return jsonify({
 				"code": 406,
-				"error": f"Falha ao importar o produto: {str(e)}"
+				"error": f"Falha ao importar o produtos: {str(e)}"
 			}), 406
 		except Exception as e:
 			return jsonify({
@@ -65,7 +65,7 @@ def register_routes_produto(app):
 			return jsonify({
 				"code": 201,
 				"msg": "Produto cadastrado com sucesso!",
-				"produto": produto
+				"produtos": produto
 			}), 201
 		except (ProdutoExisteException, ValidacaoException) as e:
 			return jsonify({
@@ -87,7 +87,7 @@ def register_routes_produto(app):
 			return jsonify({
 				"code": 201,
 				"msg": "Produto atualizado com sucesso!",
-				"produto": produto
+				"produtos": produto
 			}), 201
 		except (ProdutoExisteException, ValidacaoException) as e:
 			return jsonify({

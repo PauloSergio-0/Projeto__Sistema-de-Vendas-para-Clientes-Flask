@@ -1,8 +1,8 @@
 from typing import List, Dict, Union, Any
 
 from database.sessao import db
-from domain.produto.exception.exception import ProdutoImportException, ProdutoExisteException, ValidacaoException
-from domain.produto.model.Produto import Produto
+from domain.produtos.exception.exception import ProdutoImportException, ProdutoExisteException, ValidacaoException
+from domain.produtos.model.Produto import Produto
 from settings.config import Config
 
 
@@ -51,7 +51,7 @@ class ProdutoDTO:
         self.__validar_campos_obrigatorio(data)
 
         if self.__existe_produto_com_codigo(data['codigo']):
-            raise ProdutoExisteException("Já existe um produto cadastrado para o código informado.")
+            raise ProdutoExisteException("Já existe um produtos cadastrado para o código informado.")
 
         produto = Produto(data['nome'], data['codigo'], data['categoria'], data['preco'])
 
@@ -71,7 +71,7 @@ class ProdutoDTO:
         self.__validar_campos_obrigatorio(data)
 
         if self.__existe_produto_com_codigo(data['codigo'], data['id']):
-            raise ProdutoExisteException("Já existe um produto cadastrado para o código informado.")
+            raise ProdutoExisteException("Já existe um produtos cadastrado para o código informado.")
 
         produto = Produto.query.get_or_404(data['id'])
         produto.nome = data.get('nome', produto.nome)
@@ -126,16 +126,16 @@ class ProdutoDTO:
 
     def __validar_importacao_produto(self, data: dict) -> None:
         if 'id' not in data or not data['id']:
-            raise ProdutoImportException("Para importar o produto é necessário ter o id do produto.")
+            raise ProdutoImportException("Para importar o produtos é necessário ter o id do produtos.")
 
         self.__tratar_preco(data)
         self.__validar_campos_obrigatorio(data)
 
         if self.__existe_produto_com_id(data['id']):
-            raise ProdutoExisteException("Já existe um produto cadastrado para o id informado.")
+            raise ProdutoExisteException("Já existe um produtos cadastrado para o id informado.")
 
         if self.__existe_produto_com_codigo(data['codigo']):
-            raise ProdutoExisteException("Já existe um produto cadastrado para o código informado.")
+            raise ProdutoExisteException("Já existe um produtos cadastrado para o código informado.")
 
     def __tratar_preco(self, data: dict) -> None:
         if isinstance(data['preco'], str):
@@ -143,24 +143,24 @@ class ProdutoDTO:
 
     def __validar_campos_obrigatorio(self, data: dict) -> None:
         if 'nome' not in data:
-            raise ValidacaoException("Para importar o produto é necessário ter o nome do produto.")
+            raise ValidacaoException("Para importar o produtos é necessário ter o nome do produtos.")
         if not isinstance(data['nome'], str) or not data['nome'].strip():
-            raise ValidacaoException("Para importar o produto o campo 'nome' deve ser uma string não vazia.")
+            raise ValidacaoException("Para importar o produtos o campo 'nome' deve ser uma string não vazia.")
 
         if 'codigo' not in data:
-            raise ValidacaoException("Para importar o produto é necessário ter o código do produto.")
+            raise ValidacaoException("Para importar o produtos é necessário ter o código do produtos.")
         if not isinstance(data['codigo'], str) or not data['codigo'].strip():
-            raise ValidacaoException("Para importar o produto o campo 'codigo' deve ser uma string não vazia.")
+            raise ValidacaoException("Para importar o produtos o campo 'codigo' deve ser uma string não vazia.")
 
         if 'categoria' not in data:
-            raise ValidacaoException("Para importar o produto é necessário ter a categoria do produto.")
+            raise ValidacaoException("Para importar o produtos é necessário ter a categoria do produtos.")
         if not isinstance(data['categoria'], str) or not data['categoria'].strip():
-            raise ValidacaoException("Para importar o produto o campo 'categoria' deve ser uma string não vazia.")
+            raise ValidacaoException("Para importar o produtos o campo 'categoria' deve ser uma string não vazia.")
 
         if 'preco' not in data:
-            raise ValidacaoException("Para importar o produto é necessário ter o preço do produto.")
+            raise ValidacaoException("Para importar o produtos é necessário ter o preço do produtos.")
         if not isinstance(data['preco'], (float, int)) or data['preco'] <= 0:
-            raise ValidacaoException("Para importar o produto o campo 'preco' deve ser um número positivo.")
+            raise ValidacaoException("Para importar o produtos o campo 'preco' deve ser um número positivo.")
 
     def __existe_produto_com_id(self, id_produto: int) -> bool:
         return Produto.query.filter_by(id=id_produto).first() is not None
