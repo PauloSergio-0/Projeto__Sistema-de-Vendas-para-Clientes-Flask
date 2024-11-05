@@ -1,6 +1,6 @@
-from flask import Flask, request, jsonify
-from src.clientes.model import Cliente, Status
-from src.database import db
+from flask import request, jsonify
+from domain.clientes.model import Cliente, Status
+from database import db
 from sqlalchemy.exc import IntegrityError
 
 def register_routes_cliente(app):

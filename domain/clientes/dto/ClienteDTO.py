@@ -1,7 +1,7 @@
 from typing import List, Dict, Any, Optional
-from src.database import db
-from src.clientes.model import Cliente, Status
-from src.clientes.exception import ClienteExisteException, ValidacaoException
+from database import db
+from domain.clientes.exception.exception import ClienteExisteException, ValidacaoException
+from domain.clientes.model import Cliente, Status
 
 class ClienteDTO:
     def get_descricao_status(self, status: str) -> str:

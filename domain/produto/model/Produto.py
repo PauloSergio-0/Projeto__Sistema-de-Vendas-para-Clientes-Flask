@@ -1,5 +1,5 @@
-from src.database.sessao import db
-from src.settings.config import Config
+from database.sessao import db
+from settings.config import Config
 
 class Produto(db.Model):
     __tablename__ = 'produtos'

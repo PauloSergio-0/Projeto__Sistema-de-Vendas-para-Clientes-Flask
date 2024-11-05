@@ -1,9 +1,9 @@
 from typing import List, Dict, Union, Any
 
-from src.database.sessao import db
-from src.produto.exception.exception import ProdutoImportException, ProdutoExisteException, ValidacaoException
-from src.produto.model.Produto import Produto
-from src.settings.config import Config
+from database.sessao import db
+from domain.produto.exception.exception import ProdutoImportException, ProdutoExisteException, ValidacaoException
+from domain.produto.model.Produto import Produto
+from settings.config import Config
 
 
 class ProdutoDTO:

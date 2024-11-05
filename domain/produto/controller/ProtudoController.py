@@ -1,7 +1,7 @@
 from flask import request, jsonify
 
-from src.produto.exception.exception import ProdutoImportException, ProdutoExisteException, ValidacaoException
-from src.produto.dto.ProdutoDTO import ProdutoDTO
+from domain.produto.exception.exception import ProdutoImportException, ProdutoExisteException, ValidacaoException
+from domain.produto.dto.ProdutoDTO import ProdutoDTO
 
 
 def register_routes_produto(app):
