@@ -12,7 +12,22 @@ def register_routes_produto(app):
 
 			return jsonify({
 				"code": 200,
-				"produto": produtos
+				"produtos": produtos
+			}), 200
+		except Exception as e:
+			return jsonify({
+				"code": 500,
+				"error": "Desculpe-me, ocorreu um erro inesperado."
+			}), 500
+
+	@app.route('/listar/produto/<int:id>', methods=['GET'])
+	def listar_produto(id):
+		try:
+			produto = ProdutoDTO().consultar_produto(id)
+
+			return jsonify({
+				"code": 200,
+				"produto": produto
 			}), 200
 		except Exception as e:
 			return jsonify({

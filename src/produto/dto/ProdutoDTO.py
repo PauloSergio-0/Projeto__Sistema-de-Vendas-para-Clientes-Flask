@@ -25,6 +25,19 @@ class ProdutoDTO:
 
         return resultado
 
+    def consultar_produto(self, id):
+        produto = Produto.query.get_or_404(id)
+
+        return {
+            'id': produto.id,
+            'nome': produto.nome,
+            'codigo': produto.codigo,
+            'categoria': produto.categoria,
+            'preco': produto.preco,
+            'status': self.get_descricao_status(produto.status),
+            'status_code': produto.status
+        }
+
     def importar_produto(self, data: dict) -> None:
         self.__validar_importacao_produto(data)
 
