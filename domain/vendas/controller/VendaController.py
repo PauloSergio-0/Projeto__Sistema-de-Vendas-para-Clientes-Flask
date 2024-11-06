@@ -41,40 +41,46 @@ def register_routes_venda(app):
         try:
             # Recebe os dados da requisição JSON
             data = request.get_json()
-
+            
             # Valida a presença dos campos obrigatórios no JSON
-            vendas = data.get("vendas")
-            if not vendas:
-                return jsonify({"erro": "Nenhuma venda encontrada no payload"}), 400
-
+            # vendas = data.get("vendas")
+            
+            # if not vendas:
+            #     return jsonify({"erro": "Nenhuma venda encontrada no payload"}), 400
+            print(data)
+            
             # Itera sobre as vendas no JSON
-            for venda_data in vendas:
-                # Obtendo os dados com os nomes exatos das colunas do CSV
-                id_cliente = venda_data.get("ID do Cliente")
-                id_produto = venda_data.get("ID do Produto")
-                quantidade = venda_data.get("Quantidade")
-                data_venda = venda_data.get("Data da Venda")
 
+            # Obtendo os dados com os nomes exatos das colunas do CSV
+            id_cliente = data.get("id_do_cliente")
+            id_produto = data.get("id_do_produto")
+            quantidade = data.get("quantidade")
+            data_venda = data.get("data_da_venda")
+            
+
+            print("foi")
                 # Verificação dos campos obrigatórios
-                if not all([id_cliente, id_produto, quantidade, data_venda]):
-                    return jsonify({"erro": "Campos obrigatórios ausentes em uma das vendas"}), 400
+            # if not all([id_cliente, id_produto, quantidade, data_venda]):
+            #     return jsonify({"erro": "Campos obrigatórios ausentes em uma das vendas"}), 400
 
-                # Converte a data para um objeto datetime, se necessário
-                try:
-                    data_venda = datetime.strptime(data_venda, "%Y-%m-%d")
-                except ValueError:
-                    return jsonify({"erro": "Formato de data inválido. Use o formato YYYY-MM-DD"}), 400
+            # Converte a data para um objeto datetime, se necessário
+            try:
+                print("foi 2")
+                data_venda = datetime.strptime(str(data_venda), "%Y-%m-%d")
+            except ValueError:
+                return jsonify({"erro": "Formato de data inválido. Use o formato YYYY-MM-DD"}), 400
 
-                # Cria a instância de Venda
-                venda = Venda(
-                    id_cliente=id_cliente,
-                    id_produto=id_produto,
-                    quantidade=quantidade,
-                    data_venda=data_venda
-                )
+            # Cria a instância de Venda
+            venda = Venda(
+                id_cliente=id_cliente,
+                id_produto=id_produto,
+                quantidade=quantidade,
+                data_venda=data_venda
+            )
+            print("foi 3")
 
-                # Adiciona a venda ao banco de dados
-                db.session.add(venda)
+            # Adiciona a venda ao banco de dados
+            db.session.add(venda)
 
             # Confirma as alterações no banco de dados
             db.session.commit()
