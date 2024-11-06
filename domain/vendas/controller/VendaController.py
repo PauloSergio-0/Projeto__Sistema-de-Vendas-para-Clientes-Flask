@@ -49,11 +49,13 @@ def register_routes_venda(app):
 
             # Itera sobre as vendas no JSON
             for venda_data in vendas:
-                id_cliente = venda_data.get("id_do_cliente")
-                id_produto = venda_data.get("id_do_produto")
-                quantidade = venda_data.get("quantidade")
-                data_venda = venda_data.get("data_da_venda")
+                # Obtendo os dados com os nomes exatos das colunas do CSV
+                id_cliente = venda_data.get("ID do Cliente")
+                id_produto = venda_data.get("ID do Produto")
+                quantidade = venda_data.get("Quantidade")
+                data_venda = venda_data.get("Data da Venda")
 
+                # Verificação dos campos obrigatórios
                 if not all([id_cliente, id_produto, quantidade, data_venda]):
                     return jsonify({"erro": "Campos obrigatórios ausentes em uma das vendas"}), 400
 
