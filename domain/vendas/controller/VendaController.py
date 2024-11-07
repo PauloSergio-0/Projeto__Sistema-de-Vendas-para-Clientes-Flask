@@ -106,21 +106,21 @@ def register_routes_venda(app):
         try:
             data = request.get_json()
 
-            id_cliente = data.get("id_do_cliente")
-            id_produto = data.get("id_do_produto")
+            cliente_id = data.get("id_cliente")
+            produto_id = data.get("id_produto")
             quantidade = data.get("quantidade")
             data_venda = data.get("data_da_venda")
             data_venda = datetime.strptime(data_venda, "%Y-%m-%d").date()
 
-            produto = Produto.query.get(id_produto)
+            produto = Produto.query.get(produto_id)
             if not produto:
                 return jsonify({"erro": "Produto inexistente."}), 404
 
             preco_total = produto.preco * int(quantidade)
 
             venda = Venda(
-                id_cliente=int(id_cliente),
-                id_produto=int(id_produto),
+                id_cliente=int(cliente_id),
+                id_produto=int(produto),
                 quantidade=int(quantidade),
                 data_venda=data_venda,
                 preco_total=preco_total
@@ -142,6 +142,12 @@ def register_routes_venda(app):
     def cadastrar_venda():
         try:
             data = request.get_json()
+
+            try:
+                data['data_venda'] = datetime.strptime(data['data_venda'], "%Y-%m-%d").date()
+            except ValueError:
+                return jsonify({"code": 400, "error": "Formato inválido para data_venda. Use YYYY-MM-DD."}), 400
+
             venda = VendaDTO().cadastrar_venda(data)
             return jsonify({
                 "code": 201,
@@ -184,7 +190,7 @@ def register_routes_venda(app):
     def ativar_venda():
         try:
             data = request.get_json()
-            VendaDTO().ativar_venda(data['id'])  # Supondo que você tenha esse método na camada de serviço ou DTO
+            VendaDTO().ativar_venda(data['id'])
 
             return jsonify({
                 "code": 200,
