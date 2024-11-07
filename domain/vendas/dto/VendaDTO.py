@@ -45,12 +45,13 @@ class VendaDTO:
             raise ValidacaoException("Produto inexistente")
 
         preco_total = produto.preco * int(data['quantidade'])
+        data_venda = datetime.strptime(data['data'], "%Y-%m-%d").date()
 
         venda = Venda(
             data['cliente_id'],
             data['produto_id'],
             data['quantidade'],
-            data['data'],
+            data_venda,
             preco_total
         )
 
