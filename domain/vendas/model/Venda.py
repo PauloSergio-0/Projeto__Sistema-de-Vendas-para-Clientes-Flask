@@ -9,7 +9,7 @@ class Venda(db.Model):
     cliente_id = db.Column(db.Integer, nullable=False)
     produto_id = db.Column(db.Integer, nullable=False)
     quantidade = db.Column(db.Integer, nullable=False)
-    data_venda = db.Column(db.DateTime, nullable=False)
+    data_venda = db.Column(db.Date, nullable=False)
     preco_total = db.Column(db.Float, nullable=False)
 
     def __init__(self, id_cliente: int, id_produto: int, quantidade: int, data_venda: datetime, preco_total: float):
@@ -18,4 +18,3 @@ class Venda(db.Model):
         self.quantidade = quantidade
         self.data_venda = data_venda
         self.preco_total = preco_total
-

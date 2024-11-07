@@ -47,8 +47,8 @@ def register_routes_venda(app):
             data_venda = data.get("data_da_venda")
             
             try:
-                data_venda = datetime.strptime(data_venda, "%Y-%m-%d")
-                data_venda = data_venda.replace(microsecond=0)
+                data_venda = datetime.strptime(data_venda, "%Y-%m-%d").date()
+
             except ValueError:
                 return jsonify({"erro": "Formato de data inválido. Use o formato YYYY-MM-DD"}), 400
             
