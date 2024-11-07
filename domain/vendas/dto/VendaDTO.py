@@ -4,11 +4,10 @@ from domain.vendas.model.Venda import Venda
 from domain.vendas.exception.exception import VendaExisteException, ValidacaoException
 from domain.produtos.exception.exception import ProdutoImportException
 from domain.produtos.model.Produto import Produto
-from domain.vendas.model.Status_venda import StatusVenda
+from domain.vendas.model.Status import Status
 
 
 class VendaDTO:
-    """Classe de acesso aos dados de Venda."""
 
     def listar_vendas(self) -> List[Dict[str, Union[str, Any]]]:
         vendas = Venda.query.all()
@@ -23,6 +22,19 @@ class VendaDTO:
         } for venda in vendas]
 
         return resultado
+
+    def listar_venda_id(self, id_venda: int) -> Dict[str, Union[str, Any]]:
+
+        venda = Venda.query.get_or_404(id_venda)
+
+        return {
+            'id': venda.id,
+            'data_venda': venda.data_venda.isoformat(),
+            'cliente_id': venda.cliente_id,
+            'total': venda.preco_total,
+            'status': self.get_descricao_status(venda.status),
+            'status_code': venda.status
+        }
 
     def consultar_venda(self, id_venda: int) -> Dict[str, Union[str, Any]]:
         venda = Venda.query.get_or_404(id_venda)
@@ -44,7 +56,7 @@ class VendaDTO:
             data['cliente_id'], 
             data['produtos'],  
             data['total'], 
-            StatusVenda.PENDENTE  
+            Status.PENDENTE
         )
 
         db.session.add(venda)
@@ -68,7 +80,7 @@ class VendaDTO:
 
         
         status = data.get('status', venda.status)
-        if status not in {StatusVenda.PENDENTE, StatusVenda.CONCLUIDA, StatusVenda.CANCELADA}:
+        if status not in {Status.PENDENTE, Status.CONCLUIDA, Status.CANCELADA}:
             raise ValidacaoException("Status inválido. Deve ser 'pendente', 'concluida' ou 'cancelada'.")
         
         venda.status = status
@@ -84,17 +96,15 @@ class VendaDTO:
         }
 
     def get_descricao_status(self, status: str) -> str:
-        """Método para descrever o status da venda."""
-        if status == StatusVenda.PENDENTE:
+        if status == Status.PENDENTE:
             return "Pendente"
-        elif status == StatusVenda.CONCLUIDA:
+        elif status == Status.CONCLUIDA:
             return "Concluída"
-        elif status == StatusVenda.CANCELADA:
+        elif status == Status.CANCELADA:
             return "Cancelada"
         raise ValueError(f"Status inválido: {status}")
 
     def __validar_campos_obrigatorios(self, data: Dict[str, Any]) -> None:
-        """Valida os campos obrigatórios para criar ou atualizar uma venda."""
         if 'data' not in data or not data['data']:
             raise ValidacaoException("O campo 'data' é obrigatório.")
         if 'cliente_id' not in data or not data['cliente_id']:
@@ -105,7 +115,6 @@ class VendaDTO:
             raise ValidacaoException("O campo 'total' deve ser um número positivo.")
 
     def calcular_total_venda(self, produtos_ids: List[int]) -> float:
-        """Calcula o total da venda com base nos produtos comprados."""
         total = 0.0
         for produto_id in produtos_ids:
             produto = Produto.query.get(produto_id)

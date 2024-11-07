@@ -36,6 +36,72 @@ def register_routes_venda(app):
                 "error": "Desculpe-me, ocorreu um erro inesperado."
             }), 500
 
+    @app.route('/listar/venda/cliente/<int:cliente_id>', methods=['GET'])
+    def listar_vendas_cliente(cliente_id):
+        try:
+            vendas = Venda.query.filter_by(cliente_id=cliente_id).all()
+
+            vendas_json = [venda.to_dict() for venda in vendas]
+
+            return jsonify(vendas_json), 200
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+
+    @app.route('/listar/venda/produto/<int:produto_id>', methods=['GET'])
+    def listar_vendas_produto(produto_id):
+        try:
+            vendas = Venda.query.filter_by(produto_id=produto_id).all()
+
+            vendas_json = [venda.to_dict() for venda in vendas]
+
+            return jsonify(vendas_json), 200
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+    @app.route('/listar/venda/data', methods=['GET'])
+    def listar_vendas_data():
+        try:
+            cliente_id = request.args.get('cliente_id', type=int)
+            produto_id = request.args.get('produto_id', type=int)
+            data_inicio = request.args.get('data_inicio')
+            data_fim = request.args.get('data_fim')
+
+            query = Venda.query
+
+            if cliente_id:
+                query = query.filter_by(cliente_id=cliente_id)
+            if produto_id:
+                query = query.filter_by(produto_id=produto_id)
+
+            # data
+            if data_inicio:
+                try:
+                    data_inicio = datetime.strptime(data_inicio, "%Y-%m-%d")
+                except ValueError:
+                    return jsonify({"error": "Formato inválido para data_inicio. Use YYYY-MM-DD."}), 400
+                query = query.filter(Venda.data_venda >= data_inicio)
+
+            if data_fim:
+                try:
+                    data_fim = datetime.strptime(data_fim, "%Y-%m-%d")
+                except ValueError:
+                    return jsonify({"error": "Formato inválido para data_fim. Use YYYY-MM-DD."}), 400
+                query = query.filter(Venda.data_venda <= data_fim)
+
+            vendas = query.all()
+            vendas_json = [venda.to_dict() for venda in vendas]
+
+            return jsonify({
+                "code": 200,
+                "vendas": vendas_json
+            }), 200
+        except Exception as e:
+            return jsonify({
+                "code": 500,
+                "error": "Desculpe-me, ocorreu um erro inesperado."
+            }), 500
+
     @app.route('/importar/venda', methods=['POST'])
     def importar_venda():
         try:
