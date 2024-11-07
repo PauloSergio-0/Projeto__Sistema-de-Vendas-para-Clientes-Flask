@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from domain.vendas.dto.VendaDTO import VendaDTO
-from domain.vendas.model import Venda
+from domain.vendas.model.Venda import Venda
 from database import db
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
@@ -66,24 +66,39 @@ def register_routes_venda(app):
             # Converte a data para um objeto datetime, se necessário
             try:
                 print("foi 2")
-                data_venda = datetime.strptime(str(data_venda), "%Y-%m-%d")
+                data_venda = datetime.strptime(data_venda, "%Y-%m-%d")
+                print(data_venda)
             except ValueError:
                 return jsonify({"erro": "Formato de data inválido. Use o formato YYYY-MM-DD"}), 400
+            
+            
 
+            print("foi preview")
             # Cria a instância de Venda
-            venda = Venda(
-                id_cliente=id_cliente,
-                id_produto=id_produto,
-                quantidade=quantidade,
-                data_venda=data_venda
-            )
-            print("foi 3")
+
+            try:
+                venda = Venda(
+                    id_cliente=int(id_cliente),
+                    id_produto=int(id_produto),
+                    quantidade=int(quantidade),
+                    data_venda=data_venda,
+                    preco_total= 12.1
+                )
+            except Exception as e:
+                print(e)
+
+            print(id_cliente)
+            print(venda.cliente_id)
+            print("foi 3 333 ")
 
             # Adiciona a venda ao banco de dados
-            db.session.add(venda)
+            try:
+                db.session.add(venda)
 
             # Confirma as alterações no banco de dados
-            db.session.commit()
+                db.session.commit()
+            except Exception as e:
+                print(e)
 
             return jsonify({"mensagem": "Vendas importadas com sucesso!"}), 201
 
