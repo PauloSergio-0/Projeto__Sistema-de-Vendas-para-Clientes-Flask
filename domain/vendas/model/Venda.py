@@ -1,6 +1,7 @@
-from datetime import datetime, timezone
+from datetime import date
 from database.sessao import db
-from settings.config import Config
+from sqlalchemy import Enum
+from domain.vendas.model.Status import Status
 
 class Venda(db.Model):
     __tablename__ = 'vendas'
@@ -11,10 +12,12 @@ class Venda(db.Model):
     quantidade = db.Column(db.Integer, nullable=False)
     data_venda = db.Column(db.Date, nullable=False)
     preco_total = db.Column(db.Float, nullable=False)
+    status = db.Column(Enum(Status), default=Status.CONCLUIDA.value)
 
-    def __init__(self, id_cliente: int, id_produto: int, quantidade: int, data_venda: datetime, preco_total: float):
+    def __init__(self, id_cliente: int, id_produto: int, quantidade: int, data_venda: date, preco_total: float):
         self.cliente_id = id_cliente
         self.produto_id = id_produto
         self.quantidade = quantidade
         self.data_venda = data_venda
         self.preco_total = preco_total
+        self.status = Status.CONCLUIDA.value

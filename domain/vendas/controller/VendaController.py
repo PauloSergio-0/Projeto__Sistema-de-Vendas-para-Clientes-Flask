@@ -5,7 +5,7 @@ from domain.produtos.model.Produto import Produto
 from database import db
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
-from domain.vendas.exception.exception import VendaInvalidaException, VendaNaoPermitidaException, ValidacaoException, VendaNaoEncontradaException
+from domain.vendas.exception.exception import ValidacaoException, VendaNaoEncontradaException
 
 def register_routes_venda(app):
     @app.route('/listar/venda', methods=['GET'])
@@ -46,7 +46,6 @@ def register_routes_venda(app):
             return jsonify(vendas_json), 200
         except Exception as e:
             return jsonify({"error": str(e)}), 500
-
 
     @app.route('/listar/venda/produto/<int:produto_id>', methods=['GET'])
     def listar_vendas_produto(produto_id):
@@ -106,51 +105,36 @@ def register_routes_venda(app):
     def importar_venda():
         try:
             data = request.get_json()
-            
+
             id_cliente = data.get("id_do_cliente")
             id_produto = data.get("id_do_produto")
             quantidade = data.get("quantidade")
             data_venda = data.get("data_da_venda")
-            
-            try:
-                data_venda = datetime.strptime(data_venda, "%Y-%m-%d").date()
+            data_venda = datetime.strptime(data_venda, "%Y-%m-%d").date()
 
-            except ValueError:
-                return jsonify({"erro": "Formato de data inválido. Use o formato YYYY-MM-DD"}), 400
-            
             produto = Produto.query.get(id_produto)
             if not produto:
                 return jsonify({"erro": "Produto inexistente."}), 404
 
             preco_total = produto.preco * int(quantidade)
 
-            try:
-                venda = Venda(
-                    id_cliente=int(id_cliente),
-                    id_produto=int(id_produto),
-                    quantidade=int(quantidade),
-                    data_venda=data_venda,
-                    preco_total= preco_total
-                )
-            except Exception as e:
-                print(e)
+            venda = Venda(
+                id_cliente=int(id_cliente),
+                id_produto=int(id_produto),
+                quantidade=int(quantidade),
+                data_venda=data_venda,
+                preco_total=preco_total
+            )
 
-            
-            try:
-                db.session.add(venda)
-                db.session.commit()
-            except Exception as e:
-                print(e)
+            db.session.add(venda)
+            db.session.commit()
 
             return jsonify({"mensagem": "Vendas importadas com sucesso!"}), 201
-
         except IntegrityError:
             db.session.rollback()
             return jsonify({"erro": "Erro de integridade. Verifique os IDs fornecidos."}), 409
-
         except KeyError as e:
             return jsonify({"erro": f"Campo obrigatório ausente: {str(e)}"}), 400
-
         except Exception as e:
             return jsonify({"erro": f"Desculpe, ocorreu um erro inesperado: {str(e)}"}), 500
 
@@ -242,7 +226,3 @@ def register_routes_venda(app):
                 "code": 500,
                 "error": "Desculpe-me, ocorreu um erro inesperado."
             }), 500
-
-    
-
-    

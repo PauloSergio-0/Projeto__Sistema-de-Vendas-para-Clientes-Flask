@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List, Dict, Any, Union
 from database.sessao import db
 from domain.vendas.model.Venda import Venda
@@ -14,11 +15,10 @@ class VendaDTO:
 
         resultado = [{
             'id': venda.id,
-            'data': venda.data,
+            'data': (datetime.strptime(venda.data_venda, "%a, %d %b %Y %H:%M:%S %Z")).strftime("%d/%m/%Y"),
             'cliente_id': venda.cliente_id,
-            'total': venda.total,
-            'status': self.get_descricao_status(venda.status),
-            'status_code': venda.status
+            'total': self.__tratar_valor(venda.preco_total),
+            'status': self.get_descricao_status(venda.status)
         } for venda in vendas]
 
         return resultado
@@ -123,3 +123,8 @@ class VendaDTO:
             else:
                 raise ProdutoImportException(f"Produto com id {produto_id} não encontrado.")
         return total
+
+    def __tratar_valor(self, valor: float) -> str:
+        valor = f"R$ {'{:.2f}'.format(valor)}"
+        valor = valor.replace('.', ',').replace('_', '.')
+        return valor

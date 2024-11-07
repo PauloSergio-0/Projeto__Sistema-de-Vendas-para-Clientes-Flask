@@ -1,6 +1,6 @@
 from enum import Enum
 
 class Status(Enum):
-    PENDENTE = "pendente"
-    CONCLUIDA = "concluida"
-    CANCELADA = "cancelada"
+    PENDENTE = "PENDENTE"
+    CONCLUIDA = "CONCLUIDA"
+    CANCELADA = "CANCELADA"
