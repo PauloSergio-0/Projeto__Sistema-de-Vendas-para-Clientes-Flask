@@ -160,7 +160,7 @@ def register_routes_venda(app):
                 "error": str(e)
             }), 406
         except Exception as e:
-            return jsonify({
+                return jsonify({
                 "code": 500,
                 "error": "Desculpe-me, ocorreu um erro inesperado."
             }), 500

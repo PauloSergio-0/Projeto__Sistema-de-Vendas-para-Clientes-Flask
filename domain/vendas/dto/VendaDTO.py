@@ -1,5 +1,8 @@
 from datetime import datetime
 from typing import List, Dict, Any, Union
+
+from flask import jsonify
+
 from database.sessao import db
 from domain.vendas.model.Venda import Venda
 from domain.vendas.exception.exception import VendaExisteException, ValidacaoException
@@ -23,40 +26,32 @@ class VendaDTO:
 
         return resultado
 
-    def listar_venda_id(self, id_venda: int) -> Dict[str, Union[str, Any]]:
-
-        venda = Venda.query.get_or_404(id_venda)
-
-        return {
-            'id': venda.id,
-            'data_venda': venda.data_venda.isoformat(),
-            'cliente_id': venda.cliente_id,
-            'total': venda.preco_total,
-            'status': self.get_descricao_status(venda.status),
-            'status_code': venda.status
-        }
-
     def consultar_venda(self, id_venda: int) -> Dict[str, Union[str, Any]]:
         venda = Venda.query.get_or_404(id_venda)
 
         return {
             'id': venda.id,
-            'data': venda.data,
+            'data': venda.data_venda.strftime('%d/%m/%Y'),
             'cliente_id': venda.cliente_id,
-            'total': venda.total,
-            'status': self.get_descricao_status(venda.status),
-            'status_code': venda.status
+            'total': self.__tratar_valor(venda.preco_total),
+            'status': self.get_descricao_status(venda.status)
         }
 
     def cadastrar_venda(self, data: Dict[str, Any]) -> Dict[str, Union[str, Any]]:
         self.__validar_campos_obrigatorios(data)
 
+        produto = Produto.query.get(data['produto_id'])
+        if not produto:
+            raise ValidacaoException("Produto inexistente")
+
+        preco_total = produto.preco * int(data['quantidade'])
+
         venda = Venda(
-            data['data'], 
-            data['cliente_id'], 
-            data['produtos'],  
-            data['total'], 
-            Status.PENDENTE
+            data['cliente_id'],
+            data['produto_id'],
+            data['quantidade'],
+            data['data'],
+            preco_total
         )
 
         db.session.add(venda)
@@ -64,9 +59,9 @@ class VendaDTO:
 
         return {
             'id': venda.id,
-            'data': venda.data,
+            'data': venda.data_venda.strftime('%d/%m/%Y'),
             'cliente_id': venda.cliente_id,
-            'total': venda.total,
+            'total': self.__tratar_valor(venda.preco_total),
             'status': self.get_descricao_status(venda.status)
         }
 
@@ -77,7 +72,6 @@ class VendaDTO:
         venda.data = data.get('data', venda.data)
         venda.cliente_id = data.get('cliente_id', venda.cliente_id)
         venda.total = data.get('total', venda.total)
-
         
         status = data.get('status', venda.status)
         if status not in {Status.PENDENTE, Status.CONCLUIDA, Status.CANCELADA}:
@@ -109,9 +103,9 @@ class VendaDTO:
             raise ValidacaoException("O campo 'data' é obrigatório.")
         if 'cliente_id' not in data or not data['cliente_id']:
             raise ValidacaoException("O campo 'cliente_id' é obrigatório.")
-        if 'produtos' not in data or not isinstance(data['produtos'], list) or len(data['produtos']) == 0:
+        if 'produto_id' not in data or not data['produto_id']:
             raise ValidacaoException("O campo 'produtos' deve ser uma lista de produtos com pelo menos um item.")
-        if 'total' not in data or not isinstance(data['total'], (int, float)) or data['total'] <= 0:
+        if 'quantidade' not in data or not data['quantidade'] or data['quantidade'] <= 0:
             raise ValidacaoException("O campo 'total' deve ser um número positivo.")
 
     def calcular_total_venda(self, produtos_ids: List[int]) -> float:
