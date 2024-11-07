@@ -39,11 +39,11 @@ def register_routes_venda(app):
     @app.route('/listar/venda/cliente/<int:cliente_id>', methods=['GET'])
     def listar_vendas_cliente(cliente_id):
         try:
-            vendas = Venda.query.filter_by(cliente_id=cliente_id).all()
-
-            vendas_json = [venda.to_dict() for venda in vendas]
-
-            return jsonify(vendas_json), 200
+            venda = VendaDTO().consultar_por_cliente_id(cliente_id)
+            return jsonify({
+                "code": 200,
+                "venda": venda
+            }), 200
         except Exception as e:
             return jsonify({"error": str(e)}), 500
 

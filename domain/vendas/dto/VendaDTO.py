@@ -129,3 +129,14 @@ class VendaDTO:
         data_formatada = data_objeto.strftime("%d/%m/%Y")
 
         return data_formatada
+
+    def consultar_por_cliente_id(self, cliente_id):
+        vendas = Venda.query.filter_by(cliente_id=cliente_id).all()
+
+        return [{
+            'id': venda.id,
+            'data': venda.data_venda.strftime('%d/%m/%Y'),
+            'cliente_id': venda.cliente_id,
+            'total': self.__tratar_valor(venda.preco_total),
+            'status': self.get_descricao_status(venda.status)
+        } for venda in vendas]
