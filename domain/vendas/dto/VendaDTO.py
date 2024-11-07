@@ -2,7 +2,10 @@ from typing import List, Dict, Any, Union
 from database.sessao import db
 from domain.vendas.model.Venda import Venda
 from domain.vendas.exception.exception import VendaExisteException, ValidacaoException
+from domain.produtos.exception.exception import ProdutoImportException
 from domain.produtos.model.Produto import Produto
+from domain.vendas.model.Status_venda import StatusVenda
+
 
 class VendaDTO:
     """Classe de acesso aos dados de Venda."""
@@ -39,9 +42,9 @@ class VendaDTO:
         venda = Venda(
             data['data'], 
             data['cliente_id'], 
-            data['produtos'],  # Espera uma lista de produtos ou ids
+            data['produtos'],  
             data['total'], 
-            StatusVenda.PENDENTE  # Status inicial da venda
+            StatusVenda.PENDENTE  
         )
 
         db.session.add(venda)
@@ -63,7 +66,7 @@ class VendaDTO:
         venda.cliente_id = data.get('cliente_id', venda.cliente_id)
         venda.total = data.get('total', venda.total)
 
-        # Atualiza status se fornecido
+        
         status = data.get('status', venda.status)
         if status not in {StatusVenda.PENDENTE, StatusVenda.CONCLUIDA, StatusVenda.CANCELADA}:
             raise ValidacaoException("Status inválido. Deve ser 'pendente', 'concluida' ou 'cancelada'.")
