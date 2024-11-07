@@ -142,12 +142,6 @@ def register_routes_venda(app):
     def cadastrar_venda():
         try:
             data = request.get_json()
-
-            try:
-                data['data_venda'] = datetime.strptime(data['data_venda'], "%Y-%m-%d").date()
-            except ValueError:
-                return jsonify({"code": 400, "error": "Formato inválido para data_venda. Use YYYY-MM-DD."}), 400
-
             venda = VendaDTO().cadastrar_venda(data)
             return jsonify({
                 "code": 201,
