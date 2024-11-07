@@ -15,7 +15,7 @@ class VendaDTO:
 
         resultado = [{
             'id': venda.id,
-            'data': (datetime.strptime(venda.data_venda, "%a, %d %b %Y %H:%M:%S %Z")).strftime("%d/%m/%Y"),
+            'data': venda.data_venda.strftime('%d/%m/%Y'),
             'cliente_id': venda.cliente_id,
             'total': self.__tratar_valor(venda.preco_total),
             'status': self.get_descricao_status(venda.status)
@@ -128,3 +128,9 @@ class VendaDTO:
         valor = f"R$ {'{:.2f}'.format(valor)}"
         valor = valor.replace('.', ',').replace('_', '.')
         return valor
+
+    def __tratar_data(self, data) -> str:
+        data_objeto = datetime.strptime(data, "%a, %d %b %Y %H:%M:%S %Z")
+        data_formatada = data_objeto.strftime("%d/%m/%Y")
+
+        return data_formatada
