@@ -1,6 +1,6 @@
-from src.database import db
+from database import db
 from sqlalchemy import Enum
-from src.clientes.model.Status import Status
+from domain.clientes.model.Status import Status
 
 class Cliente(db.Model):
     __tablename__ = 'clientes'
