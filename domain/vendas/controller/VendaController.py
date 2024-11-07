@@ -1,6 +1,7 @@
 from flask import request, jsonify
 from domain.vendas.dto.VendaDTO import VendaDTO
 from domain.vendas.model.Venda import Venda
+from domain.produtos.model.Produto import Produto
 from database import db
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
@@ -51,6 +52,11 @@ def register_routes_venda(app):
             except ValueError:
                 return jsonify({"erro": "Formato de data inválido. Use o formato YYYY-MM-DD"}), 400
             
+            produto = Produto.query.get(id_produto)
+            if not produto:
+                return jsonify({"erro": "Produto inexistente."}), 404
+
+            preco_total = produto.preco * int(quantidade)
 
             try:
                 venda = Venda(
@@ -58,7 +64,7 @@ def register_routes_venda(app):
                     id_produto=int(id_produto),
                     quantidade=int(quantidade),
                     data_venda=data_venda,
-                    preco_total= 12.1
+                    preco_total= preco_total
                 )
             except Exception as e:
                 print(e)
