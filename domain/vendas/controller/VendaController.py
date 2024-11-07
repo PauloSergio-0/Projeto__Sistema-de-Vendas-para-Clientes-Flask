@@ -6,7 +6,6 @@ from datetime import datetime
 from sqlalchemy.exc import IntegrityError
 from domain.vendas.exception.exception import VendaInvalidaException, VendaNaoPermitidaException, ValidacaoException, VendaNaoEncontradaException
 
-# Função para registrar as rotas de venda diretamente no app
 def register_routes_venda(app):
     @app.route('/listar/venda', methods=['GET'])
     def listar_vendas():
@@ -39,42 +38,19 @@ def register_routes_venda(app):
     @app.route('/importar/venda', methods=['POST'])
     def importar_venda():
         try:
-            # Recebe os dados da requisição JSON
             data = request.get_json()
             
-            # Valida a presença dos campos obrigatórios no JSON
-            # vendas = data.get("vendas")
-            
-            # if not vendas:
-            #     return jsonify({"erro": "Nenhuma venda encontrada no payload"}), 400
-            print(data)
-            
-            # Itera sobre as vendas no JSON
-
-            # Obtendo os dados com os nomes exatos das colunas do CSV
             id_cliente = data.get("id_do_cliente")
             id_produto = data.get("id_do_produto")
             quantidade = data.get("quantidade")
             data_venda = data.get("data_da_venda")
             
-
-            print("foi")
-                # Verificação dos campos obrigatórios
-            # if not all([id_cliente, id_produto, quantidade, data_venda]):
-            #     return jsonify({"erro": "Campos obrigatórios ausentes em uma das vendas"}), 400
-
-            # Converte a data para um objeto datetime, se necessário
             try:
-                print("foi 2")
                 data_venda = datetime.strptime(data_venda, "%Y-%m-%d")
-                print(data_venda)
+                data_venda = data_venda.replace(microsecond=0)
             except ValueError:
                 return jsonify({"erro": "Formato de data inválido. Use o formato YYYY-MM-DD"}), 400
             
-            
-
-            print("foi preview")
-            # Cria a instância de Venda
 
             try:
                 venda = Venda(
@@ -87,15 +63,9 @@ def register_routes_venda(app):
             except Exception as e:
                 print(e)
 
-            print(id_cliente)
-            print(venda.cliente_id)
-            print("foi 3 333 ")
-
-            # Adiciona a venda ao banco de dados
+            
             try:
                 db.session.add(venda)
-
-            # Confirma as alterações no banco de dados
                 db.session.commit()
             except Exception as e:
                 print(e)
@@ -103,16 +73,13 @@ def register_routes_venda(app):
             return jsonify({"mensagem": "Vendas importadas com sucesso!"}), 201
 
         except IntegrityError:
-            # Lida com erros de integridade do banco de dados (por exemplo, IDs inexistentes)
             db.session.rollback()
             return jsonify({"erro": "Erro de integridade. Verifique os IDs fornecidos."}), 409
 
         except KeyError as e:
-            # Campo obrigatório ausente
             return jsonify({"erro": f"Campo obrigatório ausente: {str(e)}"}), 400
 
         except Exception as e:
-            # Erro genérico inesperado
             return jsonify({"erro": f"Desculpe, ocorreu um erro inesperado: {str(e)}"}), 500
 
     @app.route('/cadastrar/venda', methods=['POST'])
