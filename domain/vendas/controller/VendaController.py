@@ -106,8 +106,8 @@ def register_routes_venda(app):
         try:
             data = request.get_json()
 
-            cliente_id = data.get("id_cliente")
-            produto_id = data.get("id_produto")
+            cliente_id = data.get("id_do_cliente")
+            produto_id = data.get("id_do_produto")
             quantidade = data.get("quantidade")
             data_venda = data.get("data_da_venda")
             data_venda = datetime.strptime(data_venda, "%Y-%m-%d").date()
@@ -120,7 +120,7 @@ def register_routes_venda(app):
 
             venda = Venda(
                 id_cliente=int(cliente_id),
-                id_produto=int(produto),
+                id_produto=int(produto.id),
                 quantidade=int(quantidade),
                 data_venda=data_venda,
                 preco_total=preco_total
