@@ -140,3 +140,14 @@ class VendaDTO:
             'total': self.__tratar_valor(venda.preco_total),
             'status': self.get_descricao_status(venda.status)
         } for venda in vendas]
+
+    def consultar_por_produto_id(self, produto_id):
+        vendas = Venda.query.filter_by(produto_id=produto_id).all()
+
+        return [{
+            'id': venda.id,
+            'data': venda.data_venda.strftime('%d/%m/%Y'),
+            'cliente_id': venda.cliente_id,
+            'total': self.__tratar_valor(venda.preco_total),
+            'status': self.get_descricao_status(venda.status)
+        } for venda in vendas]
