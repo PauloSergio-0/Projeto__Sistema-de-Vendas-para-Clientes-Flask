@@ -66,27 +66,27 @@ class VendaDTO:
             'status': self.get_descricao_status(venda.status)
         }
 
-    def atualizar_venda(self, id_venda: int, data: Dict[str, Any]) -> Dict[str, Union[str, Any]]:
-        self.__validar_campos_obrigatorios(data)
+    def atualizar_venda(self, id_venda, data):
+        produto = Produto.query.get(data['produto_id'])
+        if not produto:
+            raise ValidacaoException("Produto inexistente")
+
+        preco_total = produto.preco * int(data['quantidade'])
 
         venda = Venda.query.get_or_404(id_venda)
-        venda.data = data.get('data', venda.data)
         venda.cliente_id = data.get('cliente_id', venda.cliente_id)
-        venda.total = data.get('total', venda.total)
-        
-        status = data.get('status', venda.status)
-        if status not in {Status.PENDENTE, Status.CONCLUIDA, Status.CANCELADA}:
-            raise ValidacaoException("Status inválido. Deve ser 'pendente', 'concluida' ou 'cancelada'.")
-        
-        venda.status = status
+        venda.produto_id = data.get('produto_id', venda.produto_id)
+        venda.quantidade = data.get('quantidade', venda.quantidade)
+        venda.preco_total = preco_total
 
+        db.session.add(venda)
         db.session.commit()
 
         return {
             'id': venda.id,
-            'data': venda.data,
+            'data': venda.data_venda.strftime('%d/%m/%Y'),
             'cliente_id': venda.cliente_id,
-            'total': venda.total,
+            'total': self.__tratar_valor(venda.preco_total),
             'status': self.get_descricao_status(venda.status)
         }
 

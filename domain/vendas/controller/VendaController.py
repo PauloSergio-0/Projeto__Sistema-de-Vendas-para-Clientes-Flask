@@ -115,6 +115,7 @@ def register_routes_venda(app):
         try:
             data = request.get_json()
             venda = VendaDTO().cadastrar_venda(data)
+
             return jsonify({
                 "code": 201,
                 "msg": "Venda cadastrada com sucesso!",
@@ -131,11 +132,12 @@ def register_routes_venda(app):
                 "error": "Desculpe-me, ocorreu um erro inesperado."
             }), 500
 
-    @app.route('/atualizar/venda', methods=['PUT'])
-    def atualizar_venda():
+    @app.route('/atualizar/venda/<int:id>', methods=['PUT'])
+    def atualizar_venda(id):
         try:
             data = request.get_json()
-            venda = VendaDTO().atualizar_venda(data)
+            venda = VendaDTO().atualizar_venda(id, data)
+
             return jsonify({
                 "code": 201,
                 "msg": "Venda atualizada com sucesso!",
