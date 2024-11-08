@@ -162,3 +162,10 @@ class VendaDTO:
             'total': self.__tratar_valor(venda.preco_total),
             'status': self.get_descricao_status(venda.status)
         } for venda in vendas]
+
+    def excluir_venda(self, id):
+        venda = Venda.query.get_or_404(id)
+        venda.status = Status.CANCELADA.value
+
+        db.session.add(venda)
+        db.session.commit()

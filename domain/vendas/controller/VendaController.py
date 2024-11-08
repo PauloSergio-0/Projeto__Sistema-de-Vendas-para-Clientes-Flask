@@ -152,46 +152,14 @@ def register_routes_venda(app):
                 "error": f"Desculpe-me, ocorreu um erro inesperado. {str(e)}"
             }), 500
 
-    @app.route('/ativar/venda', methods=["PATCH"])
-    def ativar_venda():
+    @app.route('/cancelar/venda/<int:id>', methods=['DELETE'])
+    def excluir_venda(id):
         try:
-            data = request.get_json()
-            VendaDTO().ativar_venda(data['id'])
+            VendaDTO().excluir_venda(id)
 
             return jsonify({
                 "code": 200,
-                "menssagem": "Venda ativada com sucesso!"
-            }), 200
-        except Exception as e:
-            return jsonify({
-                "code": 500,
-                "error": "Desculpe-me, ocorreu um erro inesperado."
-            }), 500
-
-    @app.route('/inativar/venda', methods=["PATCH"])
-    def inativar_venda():
-        try:
-            data = request.get_json()
-            VendaDTO().inativar_venda(data['id'])
-
-            return jsonify({
-                "code": 200,
-                "menssagem": "Venda inativada com sucesso!"
-            }), 200
-        except Exception as e:
-            return jsonify({
-                "code": 500,
-                "error": "Desculpe-me, ocorreu um erro inesperado."
-            }), 500
-
-    @app.route('/excluir/venda', methods=['DELETE'])
-    def excluir_venda():
-        try:
-            data = request.get_json()
-            VendaDTO().excluir_venda(data['id'])
-            return jsonify({
-                "code": 200,
-                "menssagem": "Venda deletada com sucesso!"
+                "menssagem": "Venda cancelada com sucesso!"
             }), 200
         except Exception as e:
             return jsonify({
