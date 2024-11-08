@@ -63,6 +63,9 @@ def register_routes_venda(app):
     @app.route('/listar/venda/data/<data>', methods=['GET'])
     def listar_vendas_data(data):
         try:
+            if not (len(data) == 10 and data[4] == '-' and data[7] == '-'):
+                raise ValueError("Formato de data inválido. Use 'YYYY-MM-DD'.")
+
             data_venda = datetime.strptime(data, '%Y-%m-%d').date()
             vendas = VendaDTO().consultar_por_data_venda(data_venda)
 

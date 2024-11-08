@@ -27,7 +27,7 @@ def register_routes_produto(app):
 
 			return jsonify({
 				"code": 200,
-				"produtos": produto
+				"produto": produto
 			}), 200
 		except Exception as e:
 			return jsonify({
@@ -64,8 +64,8 @@ def register_routes_produto(app):
 
 			return jsonify({
 				"code": 201,
-				"msg": "Produto cadastrado com sucesso!",
-				"produtos": produto
+				"detail": "Produto cadastrado com sucesso!",
+				"produto": produto
 			}), 201
 		except (ProdutoExisteException, ValidacaoException) as e:
 			return jsonify({
@@ -86,8 +86,8 @@ def register_routes_produto(app):
 
 			return jsonify({
 				"code": 201,
-				"msg": "Produto atualizado com sucesso!",
-				"produtos": produto
+				"detail": "Produto atualizado com sucesso!",
+				"produto": produto
 			}), 201
 		except (ProdutoExisteException, ValidacaoException) as e:
 			return jsonify({
@@ -108,7 +108,7 @@ def register_routes_produto(app):
 
 			return jsonify({
 				"code": 200,
-				"menssagem": "Produto ativado com sucesso!"
+				"detail": "Produto ativado com sucesso!"
 			}), 200
 		except:
 			return jsonify({
@@ -124,7 +124,7 @@ def register_routes_produto(app):
 
 			return jsonify({
 				"code": 200,
-				"menssagem": "Produto inativado com sucesso!"
+				"detail": "Produto inativado com sucesso!"
 			}), 200
 		except Exception as e:
 			return jsonify({
@@ -140,7 +140,7 @@ def register_routes_produto(app):
 
 			return jsonify({
 				"code": 200,
-				"menssagem": "Produto deletado com sucesso!"
+				"detail": "Produto deletado com sucesso!"
 			}), 200
 		except Exception as e:
 			return jsonify({

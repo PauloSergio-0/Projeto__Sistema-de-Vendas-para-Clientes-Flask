@@ -13,7 +13,7 @@ def register_routes_cliente(app):
 
             db.session.add(cliente)
             db.session.commit()
-            return jsonify({"mensagem": "adicionado com sucesso", "id": cliente.id}), 201
+            return jsonify({"mensagem": "Cliente importado com sucesso."}), 200
 
         except IntegrityError:
             db.session.rollback()
@@ -34,7 +34,7 @@ def register_routes_cliente(app):
 
             db.session.add(cliente)
             db.session.commit()
-            return jsonify({"mensagem": "adicionado com sucesso"}), 201
+            return jsonify({"mensagem": "Cliente cadastrado com sucesso."}), 201
 
         except IntegrityError:
             db.session.rollback()
@@ -88,14 +88,13 @@ def register_routes_cliente(app):
 
             status = Status(data.get('status', cliente.status.value).upper())
 
-
             cliente.nome = data.get('nome', cliente.nome)
             cliente.endereco = data.get('endereco', cliente.endereco)
             cliente.contato = data.get('contato', cliente.contato)
             cliente.status = Status(status)
             db.session.commit()
 
-            return jsonify({'id': cliente.id}), 200
+            return jsonify({"mensagem": "Cliente atualizado com sucesso."}), 204
 
         except IntegrityError:
             db.session.rollback()
@@ -140,9 +139,11 @@ def register_routes_cliente(app):
     def delete_cliente(id):
         try:
             cliente = Cliente.query.get_or_404(id)
-            db.session.delete(cliente)
+            cliente.status = Status.DELETADO
+
+            db.session.add(cliente)
             db.session.commit()
-            return '', 204
+
+            return jsonify({"mensagem": "Cliente deletado com sucesso."}), 200
         except Exception as e:
             return jsonify({"erro": str(e)}), 500
-
